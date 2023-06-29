@@ -1,9 +1,11 @@
-from collections.abc import Generator
+from collections.abc import Generator, Iterator
+from itertools import islice, chain
 
-with open('d3.txt') as f:
-    lines = f.read().splitlines()
 
-triangles = [[int(textside) for textside in line.split()] for line in lines]
+def batched(iterable, n):
+    it = iter(iterable)
+    while batch := tuple(islice(it, n)):
+        yield batch
 
 def valid_by_sum(sides: list[int]) -> bool:
     for i, target in enumerate(sides):
@@ -11,11 +13,18 @@ def valid_by_sum(sides: list[int]) -> bool:
             return False
     return True
 
-def filter_invalid(triangles: list[list[int]]) -> Generator[list[int]]:
+def filter_invalid(triangles: Iterator[Iterator[int]]) -> Generator[list[int]]:
     for triangle in triangles:
-        if valid_by_sum(triangle):
+        if valid_by_sum(list(triangle)):
             yield triangle
 
-print(len(list(filter_invalid(triangles))))
+with open('d3.txt') as f:
+    lines = f.read().splitlines()
 
+triangles = [[int(textside) for textside in line.split()] for line in lines]
+triangles_rotated = reversed(list(zip(*triangles)))
+triangles_rechunked = batched(chain.from_iterable(triangles_rotated), 3)
 
+print(len(triangles))
+
+print(len(list(filter_invalid(triangles_rechunked))))
