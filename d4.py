@@ -1,4 +1,5 @@
 from collections import defaultdict
+from collections.abc import Generator
 
 
 class Room:
@@ -9,6 +10,7 @@ class Room:
         self.id = int(id)
         self.checksum = checksum.split(']')[0]
         self.name = ''.join(chunks)
+        self.fullname = '-'.join(chunks)
 
     def hash(self):
         charcount = defaultdict(int)
@@ -21,10 +23,24 @@ class Room:
     def valid(self):
         return self.checksum == self.hash()
 
+    def decode(self):
+        def _decode() -> Generator[str]:
+            for character in self.fullname:
+                match character:
+                    case '-':
+                        yield ' '
+                    case _:
+                        yield chr(((ord(character) - 97) + self.id) % 26 + 97)
+
+        return ''.join(_decode())
 
 with open('d4.txt') as f:
     lines = f.read().splitlines()
 
-rooms = (Room(line) for line in lines)
+rooms = [Room(line) for line in lines]
 print(sum(room.id for room in rooms if room.valid()))
 
+for room in rooms:
+    if room.valid():
+        print(room.id)
+        print(room.decode())
