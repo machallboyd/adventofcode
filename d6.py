@@ -1,4 +1,19 @@
 from collections import defaultdict
+from collections.abc import Generator
 
-counts = defaultdict(int)
 
+
+with open('d6.txt') as f:
+    messages = f.read().splitlines()
+
+counts = [defaultdict(int) for _ in range(len(messages[0]))]
+
+for message in messages:
+    for i, character in enumerate(message):
+        counts[i][character] += 1
+
+def password(counts) -> Generator[str]:
+    for placedict in counts:
+        yield max(placedict, key=placedict.get)
+
+print(''.join(password(counts)))
