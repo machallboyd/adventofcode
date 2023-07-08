@@ -1,8 +1,6 @@
 from collections import defaultdict
 from collections.abc import Generator
 
-
-
 with open('d6.txt') as f:
     messages = f.read().splitlines()
 
@@ -16,4 +14,8 @@ def password(counts) -> Generator[str]:
     for placedict in counts:
         yield max(placedict, key=placedict.get)
 
-print(''.join(password(counts)))
+def real_password(counts) -> Generator[str]:
+    for placedict in counts:
+        yield min(placedict, key=placedict.get)
+
+print(''.join(real_password(counts)))
