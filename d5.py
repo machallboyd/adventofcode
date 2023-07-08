@@ -1,5 +1,4 @@
 import hashlib
-from collections.abc import Generator
 
 puzzle_input = 'ugkcyxxp'
 
