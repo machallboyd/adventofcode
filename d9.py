@@ -41,5 +41,5 @@ if buffer:
         multiplier -= 1
         out += buffer
 
-print(out)
 print(len(out.strip()))
+
