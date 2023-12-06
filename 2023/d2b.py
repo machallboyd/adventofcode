@@ -4,8 +4,7 @@ from math import prod
 p = Path(__file__).with_name('d2.txt')
 
 def game_power(game: str) -> int:
-    gametag, draws = game.split(': ')
-    _, game_id = gametag.split()
+    _, draws = game.split(': ')
     local_max = {
         'red': 0,
         'green': 0,
