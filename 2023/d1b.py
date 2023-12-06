@@ -4,15 +4,6 @@ from collections.abc import Generator, Iterable
 p = Path(__file__).with_name('d1.txt')
 
 word2number = {
-    '1': '1',
-    '2': '2',
-    '3': '3',
-    '4': '4',
-    '5': '5',
-    '6': '6',
-    '7': '7',
-    '8': '8',
-    '9': '9',
     'one': '1',
     'two': '2',
     'three': '3',
@@ -25,9 +16,12 @@ word2number = {
 }
 def converter(calibration: str) -> Generator[str]:
     for i in range(len(calibration)):
-        for test_len in range(1, 6):
-            if valid := word2number.get(calibration[i: i+test_len]):
-                yield valid
+        if (c := calibration[i]).isdigit():
+            yield c
+        else:
+            for test_len in range(3, 6):
+                if valid := word2number.get(calibration[i: i+test_len]):
+                    yield valid
 
 def firstlast(digitized: Iterable[list[str]]) -> Generator[int]:
     for digits in digitized:
